@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ED-TPO Student Data Form | SGT University</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2C5AA0;
+            --primary-light: #4A7FD0;
+            --secondary: #17a2b8;
+            --accent: #FFC107;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --border: #dee2e6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .university-name {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            background: var(--light);
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 30px 20px;
+        }
+
+        /* Form Sections */
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .section-badge.completed {
+            background: var(--success);
+        }
+
+        /* Form Group */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .label-required::after {
+            content: " *";
+            color: var(--danger);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+        }
+
+        input.error,
+        select.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        input.success,
+        select.success {
+            border-color: var(--success);
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .form-text {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 6px;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Checkbox & Radio */
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .checkbox-item label,
+        .radio-item label {
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #0c5460;
+        }
+
+        .info-box.warning {
+            background: #fff3cd;
+            border-left-color: var(--warning);
+            color: #856404;
+        }
+
+        .info-box.success {
+            background: #d4edda;
+            border-left-color: var(--success);
+            color: #155724;
+        }
+
+        /* Two Column Layout */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Verification Badge */
+        .verification-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin-top: 8px;
+        }
+
+        .verification-badge.verified {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .verification-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .verification-badge.failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .checkmark {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 16px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #1f3f66;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e9ecef;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: #218838;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Modal for OTP */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+            border: none;
+            background: none;
+            padding: 0;
+            width: auto;
+        }
+
+        /* Conditional Display */
+        .conditional {
+            display: none;
+        }
+
+        .conditional.show {
+            display: block;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-message h4 {
+            margin-bottom: 10px;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-text {
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            button {
+                min-width: 120px;
+                padding: 10px 16px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                flex: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="university-name">Shree Guru Gobind Singh Tricentenary University</div>
+            <h1>📋 Student Data Portal</h1>
+            <p>Internship & Placement Information Form</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="progressText">0%</span> Complete
+            </div>
+        </div>
+
+        <!-- Form Content -->
+        <div class="content">
+            <form id="studentForm">
+
+                <!-- ========== SECTION 1: BASIC INFORMATION ========== -->
+                <div class="section">
+                    <div class="section-title">
+                        <div class="section-badge" id="badge1">1</div>
+                        Student Identification
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="regNo" class="label-required">Registration Number</label>
+                            <input type="text" id="regNo" name="regNo" placeholder="e.g., 231302001" required>
+                            <span class="error-message" id="regNoError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="studentName" class="label-required">Full Name</label>
+                            <input type="text" id="studentName" name="studentName" placeholder="Your full name" required>
+                            <span class="error-message" id="studentNameError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email" class="label-required">Email ID</label>
+                            <div style="display: flex; gap: 10px; align-items: flex-start;">
+                                <div style="flex: 1;">
+                                    <input type="email" id="email" name="email" placeholder="your.email@sgtuniversity.ac.in" required>
+                                    <span class="error-message" id="emailError"></span>
+                                </div>
+                                <button type="button" class="btn-secondary" onclick="requestEmailOTP()" style="margin-top: 0; min-width: 130px;">Verify Email</button>
+                            </div>
+                            <div id="emailVerification" class="verification-badge" style="display: none;"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone" class="label-required">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="10-digit number" maxlength="10" required>
+                            <span class="error-message" id="phoneError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="semester" class="label-required">Current Semester</label>
+                            <select id="semester" name="semester" required onchange="handleSemesterChange()">
+                                <option value="">-- Select Semester --</option>
+                                <option value="V">V (5th)</option>
+                                <option value="VII">VII (7th)</option>
+                            </select>
+                            <span class="error-message" id="semesterError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="department" class="label-required">Department</label>
+                            <select id="department" name="department" required>
+                                <option value="">-- Select Department --</option>
+                                <option value="AI_ML">AI & Machine Learning</option>
+                                <option value="CSE">Computer Science & Engineering</option>
+                                <option value="ECE">Electronics & Communication Engineering</option>
+                                <option value="ME">Mechanical Engineering</option>
+                                <option value="CE">Civil Engineering</option>
+                            </select>
+                            <span class="error-message" id="departmentError"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== SECTION 2: 5TH SEMESTER INFO ========== -->
+                <div class="section conditional" id="sem5Section">
+                    <div class="section-title">
+                        <div class="section-badge" id="badge2">2</div>
+                        Academic Background (5th Semester)
+                    </div>
+
+                    <div class="info-box">
+                        This information helps us verify your academic profile. It will be stored securely.
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tenth" class="label-required">10th Standard Marks (%)</label>
+                            <input type="number" id="tenth" name="tenth" placeholder="75.5" min="0" max="100" step="0.1">
+                            <span class="error-message" id="tenthError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="twelfth" class="label-required">12th Standard Marks (%)</label>
+                            <input type="number" id="twelfth" name="twelfth" placeholder="82.3" min="0" max="100" step="0.1">
+                            <span class="error-message" id="twelfthError"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="currentCGPA" class="label-required">Current CGPA / Percentage</label>
+                        <input type="number" id="currentCGPA" name="currentCGPA" placeholder="7.5" min="0" max="10" step="0.1" required>
+                        <span class="error-message" id="currentCGPAError"></span>
+                    </div>
+
+                    <!-- Aadhaar Verification -->
+                    <div class="form-group">
+                        <label for="aadhaar" class="label-required">Aadhaar Card Number</label>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <div style="flex: 1;">
+                                <input type="text" id="aadhaar" name="aadhaar" placeholder="12-digit number" maxlength="12" 
+                                       oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                                <span class="error-message" id="aadhaarError"></span>
+                                <div class="form-text">Only last 4 digits will be stored. Verified using official UIDAI algorithm.</div>
+                            </div>
+                            <button type="button" class="btn-secondary" onclick="verifyAadhaar()" style="margin-top: 0; min-width: 130px;">Verify</button>
+                        </div>
+                        <div id="aadhaarVerification" class="verification-badge" style="display: none;"></div>
+                    </div>
+
+                    <div class="info-box warning">
+                        <strong>🔒 Privacy & Security:</strong> Your complete Aadhaar number is validated using UIDAI's official algorithm but never stored. 
+                        Only the last 4 digits are kept for verification reference.
+                    </div>
+                </div>
+
+                <!-- ========== SECTION 3: 7TH SEMESTER - PLACEMENT & INTERNSHIP ========== -->
+                <div class="section conditional" id="sem7Section">
+                    <div class="section-title">
+                        <div class="section-badge" id="badge3">3</div>
+                        Placement & Internship Information (7th Semester)
+                    </div>
+
+                    <!-- Placement Interest -->
+                    <div class="form-group">
+                        <label class="label-required">Are you interested in Campus Placements?</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="placementYes" name="placementInterest" value="Yes" required onchange="handlePlacementChange()">
+                                <label for="placementYes">Yes, I am interested in campus placements</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="placementNo" name="placementInterest" value="No" required onchange="handlePlacementChange()">
+                                <label for="placementNo">No, I am not interested</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- If opted out - reason -->
+                    <div class="conditional form-group" id="optOutReasonSection">
+                        <label class="label-required">Reason for opting out:</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" name="optOutReason" value="Higher Studies">
+                                <label>Pursuing Higher Studies</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="optOutReason" value="Government Exam">
+                                <label>Preparing for Government Exams</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="optOutReason" value="Family Business">
+                                <label>Family Business</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="optOutReason" value="Entrepreneurship">
+                                <label>Entrepreneurship</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="optOutReason" value="Self-Arranged">
+                                <label>Self-Arranged Job/Internship</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="optOutReason" value="Health Reasons">
+                                <label>Health Reasons</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" name="optOutReason" value="Personal">
+                                <label>Personal Reasons</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- If interested in placement -->
+                    <div class="conditional" id="placementDetailsSection">
+                        <div class="info-box">
+                            Please provide information about your internship. If you haven't started yet, you can update this later.
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hasInternship" class="label-required">Are you currently on or planning an internship?</label>
+                            <select id="hasInternship" name="hasInternship" onchange="handleInternshipChange()">
+                                <option value="">-- Select Option --</option>
+                                <option value="Yes">Yes, I have/will do an internship</option>
+                                <option value="No">No, I don't plan to do an internship</option>
+                                <option value="Unsure">I'm not sure yet</option>
+                            </select>
+                        </div>
+
+                        <!-- Internship Details -->
+                        <div class="conditional" id="internshipDetailsSection">
+                            <div class="form-group">
+                                <label for="companyName" class="label-required">Company Name</label>
+                                <input type="text" id="companyName" name="companyName" placeholder="e.g., TCS, Infosys, Google">
+                                <span class="error-message" id="companyNameError"></span>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="internshipStartDate" class="label-required">Internship Start Date</label>
+                                    <input type="date" id="internshipStartDate" name="internshipStartDate">
+                                    <span class="error-message" id="internshipStartDateError"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="internshipEndDate" class="label-required">Internship End Date</label>
+                                    <input type="date" id="internshipEndDate" name="internshipEndDate">
+                                    <span class="error-message" id="internshipEndDateError"></span>
+                                </div>
+                            </div>
+
+                            <!-- Course Waiver -->
+                            <div class="form-group">
+                                <label class="label-required">Course Waiver Status</label>
+                                <div class="radio-group">
+                                    <div class="radio-item">
+                                        <input type="radio" id="waiverYes" name="waiverApproved" value="Yes" onchange="handleWaiverChange()" required>
+                                        <label for="waiverYes">Yes, I will submit/have submitted the syllabus mapping form</label>
+                                    </div>
+                                    <div class="radio-item">
+                                        <input type="radio" id="waiverNo" name="waiverApproved" value="No" onchange="handleWaiverChange()" required>
+                                        <label for="waiverNo">Not applicable / To be decided</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Documents -->
+                            <div class="form-group" style="margin-top: 20px;">
+                                <label class="label-required">Required Documents (Check those you have prepared)</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="docResume" name="docs" value="Resume">
+                                        <label for="docResume">Resume (Updated & Signed)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="docPhoto" name="docs" value="Photo">
+                                        <label for="docPhoto">Passport-Size Photograph</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="docID" name="docs" value="University ID">
+                                        <label for="docID">University ID Card (Copy)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="docMarksheets" name="docs" value="Mark Sheets">
+                                        <label for="docMarksheets">Academic Mark Sheets</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="docGovID" name="docs" value="Govt ID">
+                                        <label for="docGovID">Government ID (Aadhaar/PAN/Passport)</label>
+                                    </div>
+                                </div>
+                                <div class="form-text">Check all documents you have prepared/submitted.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== SECTION 4: CONSENT & SUBMISSION ========== -->
+                <div class="section">
+                    <div class="section-title">
+                        <div class="section-badge" id="badge4">4</div>
+                        Declaration & Consent
+                    </div>
+
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="consent1" name="consent1" required>
+                            <label for="consent1">I confirm that all the information provided above is true and accurate.</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="consent2" name="consent2" required>
+                            <label for="consent2">I agree to SGT University's data privacy policy and consent to the processing of my personal information.</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="consent3" name="consent3" required>
+                            <label for="consent3">I understand that providing false information may result in disciplinary action.</label>
+                        </div>
+                    </div>
+
+                    <div class="info-box" style="margin-top: 20px;">
+                        <strong>🔒 Data Security:</strong> All your data including Aadhaar (last 4 digits only) is encrypted and stored securely. 
+                        Your information is used only for internship and placement verification purposes.
+                    </div>
+                </div>
+
+                <!-- ========== BUTTONS ========== -->
+                <div class="button-group">
+                    <button type="button" class="btn-secondary" onclick="saveProgress()">💾 Save Progress</button>
+                    <button type="submit" class="btn-primary" onclick="submitForm(event)" id="submitBtn">📤 Submit to Google Sheets</button>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <h4>✅ Form Submitted Successfully!</h4>
+                    <p>Your data has been submitted to the training & placement office. A confirmation email will be sent to your registered email shortly.</p>
+                    <p style="margin-top: 10px; font-size: 12px;">Submission ID: <strong id="submissionId"></strong></p>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div style="background: var(--light); padding: 20px; text-align: center; border-top: 1px solid var(--border); font-size: 12px; color: #6c757d;">
+            <p>📧 For support, contact: kamalpreet_soet@sgtuniversity.ac.in</p>
+            <p>School of Engineering & Technology, SGT University, Gurugram, Haryana</p>
+        </div>
+    </div>
+
+    <!-- Email OTP Modal -->
+    <div class="modal" id="emailOTPModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeEmailOTPModal()">×</button>
+            <div class="modal-header">📧 Verify Your Email</div>
+            
+            <div class="info-box">
+                An OTP has been sent to your email address. Enter it below to verify your email.
+            </div>
+
+            <div class="form-group">
+                <label for="emailOTP" class="label-required">Enter 6-digit OTP</label>
+                <input type="text" id="emailOTP" placeholder="000000" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-secondary" onclick="closeEmailOTPModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="verifyEmailOTP()">Verify OTP</button>
+            </div>
+
+            <div class="form-text" style="margin-top: 15px; text-align: center;">
+                Didn't receive OTP? <button type="button" class="btn-secondary" style="flex: none; padding: 4px 8px; min-width: auto;" onclick="requestEmailOTP()">Resend</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loadingText">Processing...</div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        
+        // 🔴 IMPORTANT: Replace this with your deployed Google Apps Script URL
+        // Instructions in setup guide below
+        const WEB_APP_URL = "YOUR_WEB_APP_URL_HERE";  // e.g., https://script.google.com/macros/d/1xxx/usercss
+
+        // ============================================
+        // GLOBAL VARIABLES
+        // ============================================
+
+        const form = document.getElementById('studentForm');
+        let emailVerified = false;
+        let aadhaarVerified = false;
+        let currentOTPEmail = '';
+
+        // Load saved data on page load
+        window.addEventListener('load', () => {
+            loadProgress();
+            updateProgress();
+        });
+
+        // ============================================
+        // SAVE & LOAD PROGRESS
+        // ============================================
+
+        function saveProgress() {
+            const data = {
+                regNo: document.getElementById('regNo').value,
+                studentName: document.getElementById('studentName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                semester: document.getElementById('semester').value,
+                department: document.getElementById('department').value,
+                tenth: document.getElementById('tenth').value,
+                twelfth: document.getElementById('twelfth').value,
+                currentCGPA: document.getElementById('currentCGPA').value,
+                aadhaar: document.getElementById('aadhaar').value,
+                aadhaarVerified: aadhaarVerified,
+                emailVerified: emailVerified,
+                placementInterest: document.querySelector('input[name="placementInterest"]:checked')?.value || '',
+                optOutReason: document.querySelector('input[name="optOutReason"]:checked')?.value || '',
+                hasInternship: document.getElementById('hasInternship').value,
+                companyName: document.getElementById('companyName').value,
+                internshipStartDate: document.getElementById('internshipStartDate').value,
+                internshipEndDate: document.getElementById('internshipEndDate').value,
+                waiverApproved: document.querySelector('input[name="waiverApproved"]:checked')?.value || '',
+                documents: Array.from(document.querySelectorAll('input[name="docs"]:checked')).map(el => el.value),
+                timestamp: new Date().toISOString()
+            };
+
+            localStorage.setItem('studentFormData', JSON.stringify(data));
+            alert('✅ Progress saved locally. You can continue filling this form later.');
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('studentFormData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                
+                document.getElementById('regNo').value = data.regNo || '';
+                document.getElementById('studentName').value = data.studentName || '';
+                document.getElementById('email').value = data.email || '';
+                document.getElementById('phone').value = data.phone || '';
+                document.getElementById('semester').value = data.semester || '';
+                document.getElementById('department').value = data.department || '';
+                document.getElementById('tenth').value = data.tenth || '';
+                document.getElementById('twelfth').value = data.twelfth || '';
+                document.getElementById('currentCGPA').value = data.currentCGPA || '';
+                document.getElementById('aadhaar').value = data.aadhaar || '';
+                
+                emailVerified = data.emailVerified || false;
+                aadhaarVerified = data.aadhaarVerified || false;
+
+                if (data.placementInterest) {
+                    document.querySelector(`input[value="${data.placementInterest}"]`).checked = true;
+                }
+                
+                document.getElementById('hasInternship').value = data.hasInternship || '';
+                document.getElementById('companyName').value = data.companyName || '';
+                document.getElementById('internshipStartDate').value = data.internshipStartDate || '';
+                document.getElementById('internshipEndDate').value = data.internshipEndDate || '';
+                
+                if (data.waiverApproved) {
+                    document.querySelector(`input[name="waiverApproved"][value="${data.waiverApproved}"]`).checked = true;
+                }
+
+                data.documents.forEach(doc => {
+                    const checkbox = document.querySelector(`input[name="docs"][value="${doc}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+
+                // Update UI with verified status
+                if (emailVerified) {
+                    document.getElementById('emailVerification').innerHTML = '<div class="checkmark">✓</div> Email Verified';
+                    document.getElementById('emailVerification').className = 'verification-badge verified';
+                    document.getElementById('emailVerification').style.display = 'inline-flex';
+                }
+
+                if (aadhaarVerified) {
+                    document.getElementById('aadhaarVerification').innerHTML = '<div class="checkmark">✓</div> Aadhaar Verified';
+                    document.getElementById('aadhaarVerification').className = 'verification-badge verified';
+                    document.getElementById('aadhaarVerification').style.display = 'inline-flex';
+                    document.getElementById('aadhaar').disabled = true;
+                }
+
+                handleSemesterChange();
+                handlePlacementChange();
+                handleInternshipChange();
+            }
+        }
+
+        // ============================================
+        // EMAIL VERIFICATION
+        // ============================================
+
+        function requestEmailOTP() {
+            const email = document.getElementById('email').value;
+
+            if (!email || !email.includes('@')) {
+                alert('❌ Please enter a valid email address first');
+                return;
+            }
+
+            currentOTPEmail = email;
+            showLoading('Sending OTP to your email...');
+
+            callGoogleAppsScript('generateOTP', { email: email }, (response) => {
+                hideLoading();
+                if (response.success) {
+                    document.getElementById('emailOTPModal').classList.add('show');
+                    alert('✅ OTP sent to ' + email);
+                } else {
+                    alert('❌ ' + response.message);
+                }
+            });
+        }
+
+        function verifyEmailOTP() {
+            const otp = document.getElementById('emailOTP').value;
+
+            if (!otp || otp.length !== 6) {
+                alert('Please enter a 6-digit OTP');
+                return;
+            }
+
+            showLoading('Verifying OTP...');
+
+            callGoogleAppsScript('verifyOTP', { email: currentOTPEmail, otp: otp }, (response) => {
+                hideLoading();
+                if (response.success) {
+                    emailVerified = true;
+                    document.getElementById('emailVerification').innerHTML = '<div class="checkmark">✓</div> Email Verified';
+                    document.getElementById('emailVerification').className = 'verification-badge verified';
+                    document.getElementById('emailVerification').style.display = 'inline-flex';
+                    document.getElementById('email').disabled = true;
+                    
+                    closeEmailOTPModal();
+                    alert('✅ Email verified successfully!');
+                    updateProgress();
+                } else {
+                    alert('❌ ' + response.message);
+                }
+            });
+        }
+
+        function closeEmailOTPModal() {
+            document.getElementById('emailOTPModal').classList.remove('show');
+            document.getElementById('emailOTP').value = '';
+        }
+
+        // ============================================
+        // AADHAAR VERIFICATION
+        // ============================================
+
+        function verifyAadhaar() {
+            const aadhaar = document.getElementById('aadhaar').value;
+
+            if (!aadhaar || aadhaar.length !== 12) {
+                alert('❌ Please enter a valid 12-digit Aadhaar number');
+                return;
+            }
+
+            showLoading('Verifying Aadhaar...');
+
+            callGoogleAppsScript('verifyAadhaar', { aadhaar: aadhaar }, (response) => {
+                hideLoading();
+                if (response.success) {
+                    aadhaarVerified = true;
+                    const aadhaarLast4 = aadhaar.slice(-4);
+                    
+                    const badge = document.getElementById('aadhaarVerification');
+                    badge.innerHTML = '<div class="checkmark">✓</div> Aadhaar Verified';
+                    badge.className = 'verification-badge verified';
+                    badge.style.display = 'inline-flex';
+
+                    // Mask the Aadhaar
+                    document.getElementById('aadhaar').value = 'XXXX-XXXX-' + aadhaarLast4;
+                    document.getElementById('aadhaar').disabled = true;
+
+                    alert('✅ ' + response.message);
+                    updateProgress();
+                } else {
+                    alert('❌ ' + response.message);
+                }
+            });
+        }
+
+        // ============================================
+        // FORM LOGIC
+        // ============================================
+
+        function handleSemesterChange() {
+            const semester = document.getElementById('semester').value;
+            document.getElementById('sem5Section').classList.toggle('show', semester === 'V' || semester === 'VII');
+            document.getElementById('sem7Section').classList.toggle('show', semester === 'VII');
+            updateProgress();
+        }
+
+        function handlePlacementChange() {
+            const interested = document.querySelector('input[name="placementInterest"]:checked')?.value === 'Yes';
+            document.getElementById('optOutReasonSection').classList.toggle('show', !interested);
+            document.getElementById('placementDetailsSection').classList.toggle('show', interested);
+            updateProgress();
+        }
+
+        function handleInternshipChange() {
+            const hasInternship = document.getElementById('hasInternship').value === 'Yes';
+            document.getElementById('internshipDetailsSection').classList.toggle('show', hasInternship);
+            updateProgress();
+        }
+
+        function handleWaiverChange() {
+            const waiverApproved = document.querySelector('input[name="waiverApproved"]:checked')?.value === 'Yes';
+            // Can add course mapping section here if needed
+        }
+
+        function updateProgress() {
+            let filled = 0;
+            const total = 6;  // Key fields
+
+            if (document.getElementById('regNo').value) filled++;
+            if (document.getElementById('studentName').value) filled++;
+            if (document.getElementById('email').value && emailVerified) filled++;
+            if (document.getElementById('phone').value) filled++;
+            if (document.getElementById('semester').value) filled++;
+            if (document.getElementById('department').value) filled++;
+
+            const percent = Math.round((filled / total) * 100);
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = percent + '%';
+        }
+
+        // ============================================
+        // FORM SUBMISSION
+        // ============================================
+
+        function submitForm(event) {
+            event.preventDefault();
+
+            if (!validateForm()) {
+                alert('❌ Please fill all required fields and verify email & Aadhaar.');
+                return;
+            }
+
+            if (!document.getElementById('consent1').checked ||
+                !document.getElementById('consent2').checked ||
+                !document.getElementById('consent3').checked) {
+                alert('❌ Please accept all declarations before submitting.');
+                return;
+            }
+
+            showLoading('Submitting form...');
+
+            const data = collectFormData();
+
+            callGoogleAppsScript('submitForm', { data: data }, (response) => {
+                hideLoading();
+                if (response.success) {
+                    document.getElementById('submissionId').textContent = response.submissionId;
+                    document.getElementById('successMessage').classList.add('show');
+                    document.getElementById('studentForm').style.display = 'none';
+                    
+                    // Clear localStorage
+                    localStorage.removeItem('studentFormData');
+                    
+                    console.log('Form submitted successfully:', data);
+                } else {
+                    alert('❌ ' + response.message);
+                }
+            });
+        }
+
+        function collectFormData() {
+            return {
+                regNo: document.getElementById('regNo').value,
+                studentName: document.getElementById('studentName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                semester: document.getElementById('semester').value,
+                department: document.getElementById('department').value,
+                tenth: document.getElementById('tenth').value,
+                twelfth: document.getElementById('twelfth').value,
+                currentCGPA: document.getElementById('currentCGPA').value,
+                aadhaarLast4: document.getElementById('aadhaar').value.slice(-4),
+                aadhaarVerified: aadhaarVerified,
+                emailVerified: emailVerified,
+                placementInterest: document.querySelector('input[name="placementInterest"]:checked')?.value || '',
+                optOutReason: document.querySelector('input[name="optOutReason"]:checked')?.value || '',
+                hasInternship: document.getElementById('hasInternship').value,
+                companyName: document.getElementById('companyName').value,
+                internshipStartDate: document.getElementById('internshipStartDate').value,
+                internshipEndDate: document.getElementById('internshipEndDate').value,
+                waiverApproved: document.querySelector('input[name="waiverApproved"]:checked')?.value || '',
+                documents: Array.from(document.querySelectorAll('input[name="docs"]:checked')).map(el => el.value).join('; ')
+            };
+        }
+
+        function validateForm() {
+            let valid = true;
+
+            const regNo = document.getElementById('regNo').value;
+            if (!regNo) {
+                valid = false;
+            }
+
+            const email = document.getElementById('email').value;
+            if (!email || !emailVerified) {
+                alert('Please verify your email address');
+                valid = false;
+            }
+
+            const phone = document.getElementById('phone').value;
+            if (!phone || phone.length !== 10) {
+                valid = false;
+            }
+
+            if (document.getElementById('sem5Section').classList.contains('show')) {
+                if (!document.getElementById('currentCGPA').value || !aadhaarVerified) {
+                    alert('Please enter CGPA and verify Aadhaar');
+                    valid = false;
+                }
+            }
+
+            return valid;
+        }
+
+        // ============================================
+        // GOOGLE APPS SCRIPT INTEGRATION
+        // ============================================
+
+        function callGoogleAppsScript(action, params, callback) {
+            if (WEB_APP_URL === "YOUR_WEB_APP_URL_HERE") {
+                alert('⚠️ ERROR: Please update WEB_APP_URL in the HTML form with your Google Apps Script deployment URL.\n\nSee setup instructions in the script.');
+                return;
+            }
+
+            const payload = {
+                action: action,
+                ...params
+            };
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                callback(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error communicating with server: ' + error.message);
+                hideLoading();
+            });
+        }
+
+        // ============================================
+        // UI HELPERS
+        // ============================================
+
+        function showLoading(text) {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingOverlay').classList.add('show');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('show');
+        }
+
+        // Prevent accidental loss of data
+        window.addEventListener('beforeunload', (e) => {
+            if (document.getElementById('studentForm') && document.getElementById('studentForm').style.display !== 'none') {
+                if (form.querySelector('input:not([value=""])')) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            }
+        });
+
+        // Real-time progress update
+        form.addEventListener('change', updateProgress);
+        form.addEventListener('input', updateProgress);
+
+    </script>
+</body>
+</html>
