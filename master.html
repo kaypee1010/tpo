@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <style>
+    :root{--navy:#0b2545;--accent:#1d6fa5;--bg:#f4f7fb;--ok:#1b7a43;--err:#b3261e;}
+    *{box-sizing:border-box;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);margin:0;padding:0;color:#1a1a1a;}
+    header{background:var(--navy);color:#fff;padding:18px 20px;}
+    header h1{margin:0;font-size:18px;}
+    header p{margin:4px 0 0;font-size:12.5px;opacity:.85;}
+    .wrap{max-width:720px;margin:0 auto;padding:16px;}
+    .card{background:#fff;border-radius:10px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+    .card h2{font-size:14px;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin:0 0 12px;border-bottom:1px solid #e5e9f0;padding-bottom:8px;}
+    label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px;}
+    input,select,textarea{width:100%;padding:9px 10px;border:1px solid #cfd8e3;border-radius:6px;font-size:14px;background:#fff;}
+    textarea{min-height:60px;resize:vertical;}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media(max-width:520px){.row2{grid-template-columns:1fr;}}
+    .lookup-bar{display:flex;gap:8px;align-items:flex-end;}
+    .lookup-bar>div{flex:1;}
+    button{cursor:pointer;border:none;border-radius:6px;padding:10px 16px;font-size:14px;font-weight:600;}
+    .btn-primary{background:var(--accent);color:#fff;}
+    .btn-primary:disabled{background:#9db6c9;cursor:not-allowed;}
+    .btn-submit{background:var(--ok);color:#fff;width:100%;padding:13px;font-size:15px;margin-top:8px;}
+    .btn-submit:disabled{background:#9fc7ac;cursor:not-allowed;}
+    .status{margin-top:10px;font-size:13.5px;padding:10px;border-radius:6px;display:none;}
+    .status.ok{background:#e6f4ea;color:var(--ok);display:block;}
+    .status.err{background:#fbeae9;color:var(--err);display:block;}
+    .locked{background:#eef2f7;color:#444;}
+    fieldset{border:none;padding:0;margin:0;display:none;}
+    .hint{font-size:11.5px;color:#667;margin-top:2px;}
+    .required::after{content:" *";color:var(--err);}
+    .radio-group label{font-weight:400;display:inline-flex;align-items:center;gap:5px;margin-right:14px;}
+    .radio-group input{width:auto;}
+  </style>
+</head>
+<body>
+<header>
+  <h1>TPO — CSE Student Master Data Form</h1>
+  <p>Single source of truth · Sem V &amp; Sem VII · Fill once, reused everywhere</p>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <h2>Step 1 — Identify yourself</h2>
+    <div class="lookup-bar">
+      <div>
+        <label class="required">Registration Number</label>
+        <input id="regNo" placeholder="e.g. 231302002" autocomplete="off">
+      </div>
+      <button class="btn-primary" id="lookupBtn" onclick="doLookup()">Find my record</button>
+    </div>
+    <div class="hint">This pulls your Name / Program / Section / Semester automatically from department records so you don't retype them. If it's not found, double-check the number or contact TPO.</div>
+    <div id="lookupStatus" class="status"></div>
+  </div>
+
+  <fieldset id="formFields">
+    <div class="card">
+      <h2>Confirmed Academic Details</h2>
+      <div class="row2">
+        <div><label>Name</label><input id="fName" class="locked" readonly></div>
+        <div><label>Program</label><input id="fProgram" class="locked" readonly></div>
+      </div>
+      <div class="row2">
+        <div><label>Section</label><input id="fSection" class="locked" readonly></div>
+        <div><label>Semester</label><input id="fSemester" class="locked" readonly></div>
+      </div>
+      <label>Specialization (if any)</label>
+      <input id="Specialization" placeholder="e.g. AI & ML / Cyber Security / IOS /  General">
+    </div>
+
+    <div class="card">
+      <h2>Personal Details</h2>
+      <div class="row2">
+        <div><label>Father's Name</label><input id="FatherName"></div>
+        <div><label>Mother's Name</label><input id="MotherName"></div>
+      </div>
+      <div class="row2">
+        <div><label>Date of Birth</label><input id="DOB" type="date"></div>
+        <div><label>Gender</label>
+          <select id="Gender">
+            <option value="">Select</option>
+            <option>Male</option><option>Female</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <label>Category</label>
+      <select id="Category">
+        <option value="">Select</option>
+        <option>General</option><option>OBC</option><option>SC</option><option>ST</option><option>EWS</option>
+      </select>
+    </div>
+
+    <div class="card">
+      <h2>Contact Details</h2>
+      <div class="row2">
+        <div><label class="required">Personal Email</label><input id="PersonalEmail" type="email"></div>
+        <div><label class="required">University Email</label><input id="UniversityEmail" type="email"></div>
+      </div>
+      <div class="row2">
+        <div><label class="required">Mobile Number</label><input id="MobileNo" type="tel" maxlength="10"></div>
+        <div><label>WhatsApp Number (if different)</label><input id="WhatsAppNo" type="tel" maxlength="10"></div>
+      </div>
+      <label>Permanent Address</label>
+      <textarea id="Address"></textarea>
+      <label>Aadhar Number</label>
+      <input id="AadharNo" maxlength="12" placeholder="12-digit number">
+      <div class="hint">Stored for official verification / NOC purposes only — access is restricted to TPO office.</div>
+    </div>
+
+    <div class="card">
+      <h2>Academic Record</h2>
+      <div class="row2">
+        <div><label>10th %</label><input id="TenthPercent" type="number" step="0.01"></div>
+        <div><label>12th / Diploma %</label><input id="TwelfthPercent" type="number" step="0.01"></div>
+      </div>
+      <div class="row2">
+        <div><label>Current CGPA / % (till last sem)</label><input id="CurrentCGPA" type="number" step="0.01"></div>
+        <div><label>Active Backlogs</label>
+          <select id="ActiveBacklogs">
+            <option value="">Select</option>
+            <option>None</option><option>1</option><option>2</option><option>3</option><option>4+</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Placement Readiness Links</h2>
+      <label>Resume (Google Drive link, view access)</label>
+      <input id="ResumeLink" placeholder="https://drive.google.com/...">
+      <label>Photo (Google Drive link, view access)</label>
+      <input id="PhotoLink" placeholder="https://drive.google.com/...">
+      <label>LinkedIn Profile URL</label>
+      <input id="LinkedIn" placeholder="https://linkedin.com/in/...">
+    </div>
+
+    <div class="card">
+      <h2>Placement &amp; Internship Interest</h2>
+      <label class="required">Are you interested in Campus Placement Drives?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="PlacementInterest" value="Yes" onchange="toggleReason()"> Yes</label>
+        <label><input type="radio" name="PlacementInterest" value="No" onchange="toggleReason()"> No</label>
+      </div>
+      <div id="reasonBlock" style="display:none;">
+        <label>Reason (if not interested)</label>
+        <select id="InterestReason">
+          <option value="">Select</option>
+          <option>Higher Studies</option>
+          <option>Government Exam Preparation</option>
+          <option>Family Business</option>
+          <option>Entrepreneurship</option>
+          <option>Self-Arranged Job/Internship</option>
+          <option>Health Reasons</option>
+          <option>Personal Reasons</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <label style="margin-top:14px;">Interested in pursuing an Internship (with syllabus mapping / NOC)?</label>
+      <select id="InternshipInterest">
+        <option value="">Select</option>
+        <option>Yes</option>
+        <option>No</option>
+        <option>Already undergoing internship</option>
+      </select>
+    </div>
+
+    <button class="btn-submit" id="submitBtn" onclick="submitForm()">Submit Master Data</button>
+    <div id="submitStatus" class="status"></div>
+  </fieldset>
+</div>
+
+<script>
+let currentStudent = null;
+
+function doLookup(){
+  const regNo = document.getElementById('regNo').value.trim();
+  const statusEl = document.getElementById('lookupStatus');
+  const btn = document.getElementById('lookupBtn');
+  if(!regNo){ showStatus(statusEl,'err','Please enter your Registration Number.'); return; }
+  btn.disabled = true; btn.textContent = 'Searching...';
+  google.script.run
+    .withSuccessHandler(res => {
+      btn.disabled = false; btn.textContent = 'Find my record';
+      if(!res.found){
+        showStatus(statusEl,'err','Registration Number not found in department records. Please check the number, or contact TPO office if you are a new/lateral entry student.');
+        document.getElementById('formFields').style.display='none';
+        return;
+      }
+      currentStudent = res;
+      document.getElementById('fName').value = res.name || '';
+      document.getElementById('fProgram').value = res.program || '';
+      document.getElementById('fSection').value = res.section || '';
+      document.getElementById('fSemester').value = res.semester || '';
+
+      // Pre-fill from existing master record if this student already submitted before (edit mode)
+      if(res.existing){
+        const ex = res.existing;
+        const map = ['Specialization','FatherName','MotherName','Gender','Category','PersonalEmail',
+          'UniversityEmail','MobileNo','WhatsAppNo','Address','AadharNo','TenthPercent','TwelfthPercent',
+          'CurrentCGPA','ActiveBacklogs','ResumeLink','PhotoLink','LinkedIn','InterestReason','InternshipInterest'];
+        map.forEach(k => { const el = document.getElementById(k); if(el && ex[k]) el.value = ex[k]; });
+        if(ex.DOB){ try{ document.getElementById('DOB').value = new Date(ex.DOB).toISOString().substring(0,10); }catch(e){} }
+        if(ex.PlacementInterest){
+          const radio = document.querySelector('input[name="PlacementInterest"][value="'+ex.PlacementInterest+'"]');
+          if(radio) radio.checked = true;
+          toggleReason();
+        }
+        showStatus(statusEl,'ok','Welcome back, '+res.name+'. Your previous details are pre-filled — update anything that changed and resubmit.');
+      } else {
+        showStatus(statusEl,'ok','Found: '+res.name+' ('+res.program+' - Section '+res.section+', Sem '+res.semester+'). Please complete the form below.');
+      }
+      document.getElementById('formFields').style.display='block';
+    })
+    .withFailureHandler(err => {
+      btn.disabled = false; btn.textContent = 'Find my record';
+      showStatus(statusEl,'err','Error: '+err.message);
+    })
+    .lookupStudent(regNo);
+}
+
+function toggleReason(){
+  const val = document.querySelector('input[name="PlacementInterest"]:checked');
+  document.getElementById('reasonBlock').style.display = (val && val.value==='No') ? 'block' : 'none';
+}
+
+function showStatus(el, kind, msg){
+  el.className = 'status ' + kind;
+  el.textContent = msg;
+}
+
+function submitForm(){
+  if(!currentStudent){ alert('Please look up your Registration Number first.'); return; }
+  const placementInterestEl = document.querySelector('input[name="PlacementInterest"]:checked');
+  const email = document.getElementById('PersonalEmail').value.trim();
+  const uniEmail = document.getElementById('UniversityEmail').value.trim();
+  const mobile = document.getElementById('MobileNo').value.trim();
+  if(!email || !uniEmail || !mobile || !placementInterestEl){
+    alert('Please fill all required (*) fields: Personal Email, University Email, Mobile Number, and Placement Interest.');
+    return;
+  }
+
+  const data = {
+    RegistrationNo: document.getElementById('regNo').value.trim(),
+    Program: document.getElementById('fProgram').value,
+    Section: document.getElementById('fSection').value,
+    Semester: document.getElementById('fSemester').value,
+    Specialization: document.getElementById('Specialization').value,
+    FatherName: document.getElementById('FatherName').value,
+    MotherName: document.getElementById('MotherName').value,
+    DOB: document.getElementById('DOB').value,
+    Gender: document.getElementById('Gender').value,
+    Category: document.getElementById('Category').value,
+    PersonalEmail: email,
+    UniversityEmail: uniEmail,
+    MobileNo: mobile,
+    WhatsAppNo: document.getElementById('WhatsAppNo').value,
+    Address: document.getElementById('Address').value,
+    AadharNo: document.getElementById('AadharNo').value,
+    TenthPercent: document.getElementById('TenthPercent').value,
+    TwelfthPercent: document.getElementById('TwelfthPercent').value,
+    CurrentCGPA: document.getElementById('CurrentCGPA').value,
+    ActiveBacklogs: document.getElementById('ActiveBacklogs').value,
+    ResumeLink: document.getElementById('ResumeLink').value,
+    PhotoLink: document.getElementById('PhotoLink').value,
+    LinkedIn: document.getElementById('LinkedIn').value,
+    PlacementInterest: placementInterestEl.value,
+    InterestReason: document.getElementById('InterestReason').value,
+    InternshipInterest: document.getElementById('InternshipInterest').value
+  };
+
+  const btn = document.getElementById('submitBtn');
+  const statusEl = document.getElementById('submitStatus');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  google.script.run
+    .withSuccessHandler(res => {
+      btn.disabled = false; btn.textContent = 'Submit Master Data';
+      showStatus(statusEl,'ok', res.status==='updated' ? 'Your record was updated successfully.' : 'Your record was saved successfully. Thank you!');
+    })
+    .withFailureHandler(err => {
+      btn.disabled = false; btn.textContent = 'Submit Master Data';
+      showStatus(statusEl,'err','Error: '+err.message);
+    })
+    .submitMasterForm(data);
+}
+</script>
+</body>
+</html>
