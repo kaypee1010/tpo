@@ -69,6 +69,12 @@
   .obtot{display:flex;gap:8px;align-items:center;} .obtot span{color:var(--muted);}
   .final{text-align:center;padding:36px 10px;} .final svg{width:56px;height:56px;}
   footer{text-align:center;font-size:11px;color:var(--muted);padding:10px 0 30px;}
+  /* fixed credit badge, bottom-right on every screen */
+  .kpbadge{position:fixed;right:16px;bottom:16px;z-index:99;display:block;line-height:0;
+    border-radius:50%;box-shadow:0 3px 12px rgba(15,30,60,.28);transition:transform .15s ease,box-shadow .15s ease;}
+  .kpbadge:hover{transform:scale(1.07);box-shadow:0 6px 20px rgba(15,30,60,.4);}
+  .kpbadge img{height:46px;width:46px;border-radius:50%;display:block;}
+  @media (max-width:520px){ .kpbadge{right:12px;bottom:12px;} .kpbadge img{height:38px;width:38px;} }
 </style>
 </head>
 <body>
@@ -266,26 +272,29 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHvZ2WmKvMrNeBIHke
   <label>Current Internship Status *</label>
   <select id="internshipStatus" onchange="toggleInternshipDetail()">
     <option value="Not Opted">Not Opted — I am not doing an internship</option>
-    <option value="Planning">Planning / Actively Searching</option>
+    <option value="Planning">Planning / Starting Soon — offer not final yet</option>
     <option value="Ongoing">Currently Ongoing</option>
     <option value="Completed">Already Completed</option>
   </select>
+  <div class="hint" id="statusHint"></div>
 
   <div class="conditional" id="internshipDetail" style="display:none;">
-    <label>Company / Organisation Name *</label><input type="text" id="companyName">
+    <label id="lbl-company">Company / Organisation Name *</label>
+    <input type="text" id="companyName">
     <label>Company Address / Location</label><input type="text" id="companyAddress" placeholder="e.g. Gurugram, Haryana">
-    <label>Role Offered / Designation *</label><input type="text" id="roleOffered" placeholder="e.g. AI/ML Intern">
+    <label id="lbl-role">Role Offered / Designation *</label>
+    <input type="text" id="roleOffered" placeholder="e.g. AI/ML Intern">
     <label>Paid or Unpaid *</label>
     <div class="radio-row">
       <label><input type="radio" name="paidUnpaid" value="Paid" checked onclick="toggleStipend()"> Paid</label>
       <label><input type="radio" name="paidUnpaid" value="Unpaid" onclick="toggleStipend()"> Unpaid</label>
     </div>
-    <div id="stipendBox"><label>Remuneration (₹ per month) *</label><input type="number" id="remuneration"></div>
+    <div id="stipendBox"><label id="lbl-stipend">Remuneration (₹ per month) *</label><input type="number" id="remuneration"></div>
     <label>Mode</label>
     <select id="mode"><option>Offline / On-site</option><option>Online / Remote</option><option>Hybrid</option></select>
     <div class="row2">
-      <div><label>Start Date *</label><input type="date" id="startDate"></div>
-      <div><label>End Date *</label><input type="date" id="endDate"></div>
+      <div><label id="lbl-start">Start Date *</label><input type="date" id="startDate"></div>
+      <div><label id="lbl-end">End Date *</label><input type="date" id="endDate"></div>
     </div>
     <div class="errtext" id="err-dates">End date must be after start date.</div>
     <div class="row2">
@@ -293,15 +302,32 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHvZ2WmKvMrNeBIHke
       <div><label>HR / Supervisor Contact</label><input type="text" id="hrContact"></div>
     </div>
     <label>Faculty Mentor Assigned</label><input type="text" id="facultyMentor">
-    <label>Syllabus Mapping Status</label>
-    <select id="mappingStatus">
-      <option value="Not yet submitted">Not yet submitted</option>
-      <option value="Pending faculty approval">Pending faculty approval</option>
-      <option value="Approved (>=50% mapped)">Approved (≥50% mapped)</option>
-    </select>
-    <label>Approx. Syllabus Mapping % <span style="font-weight:400;color:var(--muted);">(min. 50% per policy)</span></label>
-    <input type="number" id="mappingPercent" min="0" max="100">
-    <label>Offer Letter / NOC (Google Drive link)</label><input type="text" id="offerLetterLink" placeholder="https://drive.google.com/...">
+
+    <fieldset><legend>Syllabus Mapping</legend>
+      <label>Has your syllabus mapping been done? *</label>
+      <select id="mappingStatus" onchange="toggleMappingDocs()">
+        <option value="Not yet started">No — not started yet</option>
+        <option value="Filled, pending faculty signature">Filled, pending faculty signature</option>
+        <option value="Signed by faculty and HOD">Yes — signed by faculty and HOD</option>
+      </select>
+      <label>Approx. Syllabus Mapping % <span style="font-weight:400;color:var(--muted);">(min. 50% per policy)</span></label>
+      <input type="number" id="mappingPercent" min="0" max="100">
+      <div id="mappingDocBox">
+        <label id="lbl-mapdoc">Signed Syllabus Mapping Form — Drive link *</label>
+        <input type="text" id="mappingDocLink" placeholder="https://drive.google.com/...">
+        <div class="hint">Scan or photograph the completed mapping form (with faculty and HOD signatures), upload it to Drive, set sharing to "Anyone with the link — Viewer", and paste the link here.</div>
+        <div class="errtext" id="err-mappingDocLink">Please paste a valid link (must start with http).</div>
+      </div>
+    </fieldset>
+
+    <fieldset><legend>Internship Documents</legend>
+      <label id="lbl-offer">Offer Letter — Drive link *</label>
+      <input type="text" id="offerLetterLink" placeholder="https://drive.google.com/...">
+      <div class="errtext" id="err-offerLetterLink">Please paste a valid link (must start with http).</div>
+      <label>Signed NOC — Drive link <span style="font-weight:400;color:var(--muted);">(if issued)</span></label>
+      <input type="text" id="nocLink" placeholder="https://drive.google.com/...">
+      <div class="hint">Once TPO verifies these documents, your record is marked Verified. If a link is missing or not accessible, the T&amp;P Cell will contact you.</div>
+    </fieldset>
   </div>
 
   <fieldset><legend>Placement Willingness Declaration</legend>
@@ -351,6 +377,12 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxHvZ2WmKvMrNeBIHke
 
 <footer>School of Engineering &amp; Technology · SGT University, Gurugram · Training &amp; Placement Cell</footer>
 </div>
+
+<!-- Credit badge — keep KP_Singh.png in the SAME folder as this HTML file -->
+<a class="kpbadge" href="https://kpsingh.in" target="_blank" rel="noopener noreferrer"
+   title="Developed by K.P. Singh — kpsingh.in" aria-label="Developed by K.P. Singh">
+  <img src="data:image/png;base64,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" alt="K.P. Singh">
+</a>
 
 <script>
 if(!WEB_APP_URL || WEB_APP_URL.indexOf('PASTE_YOUR') === 0){
@@ -643,9 +675,35 @@ function submitAcad(){
 }
 
 /* ===== MODULE 3: INTERNSHIP ===== */
+/* "Planning" students may not have final paperwork yet, so required fields
+   relax and every label switches to expected/tentative wording. */
+function isFirm(){
+  const s = document.getElementById('internshipStatus').value;
+  return s==='Ongoing' || s==='Completed';
+}
 function toggleInternshipDetail(){
-  document.getElementById('internshipDetail').style.display =
-    (document.getElementById('internshipStatus').value==='Not Opted')?'none':'block';
+  const status = document.getElementById('internshipStatus').value;
+  document.getElementById('internshipDetail').style.display = (status==='Not Opted')?'none':'block';
+  const firm = isFirm();
+  const star = firm ? ' *' : ' (if known)';
+  document.getElementById('lbl-company').textContent = 'Company / Organisation Name' + star;
+  document.getElementById('lbl-role').textContent    = 'Role Offered / Designation' + star;
+  document.getElementById('lbl-stipend').textContent = 'Remuneration (₹ per month)' + star;
+  document.getElementById('lbl-start').textContent   = firm ? 'Start Date *' : 'Expected Start Date (tentative)';
+  document.getElementById('lbl-end').textContent     = firm ? 'End Date *'   : 'Expected End Date (tentative)';
+  document.getElementById('lbl-offer').textContent   = firm ? 'Offer Letter — Drive link *' : 'Offer Letter — Drive link (once received)';
+  document.getElementById('statusHint').textContent = status==='Not Opted' ? '' :
+    (firm ? 'Document links are required so the T&P Cell can verify your internship.'
+          : 'Fill in whatever is confirmed so far — you can return and update this section once you receive your offer letter.');
+  toggleMappingDocs();
+}
+function toggleMappingDocs(){
+  const st = document.getElementById('mappingStatus').value;
+  const needDoc = (st === 'Signed by faculty and HOD');
+  document.getElementById('mappingDocBox').style.display = (st==='Not yet started') ? 'none' : 'block';
+  document.getElementById('lbl-mapdoc').textContent =
+    needDoc ? 'Signed Syllabus Mapping Form — Drive link *'
+            : 'Syllabus Mapping Form — Drive link (upload once signed)';
 }
 function toggleStipend(){
   document.getElementById('stipendBox').style.display =
@@ -674,7 +732,11 @@ function openIntern(){
   setVal('hrName', s.HRContactName); setVal('hrContact', s.HRContactNumber);
   setVal('facultyMentor', s.FacultyMentor);
   if(s.MappingStatus) document.getElementById('mappingStatus').value = s.MappingStatus;
-  setVal('mappingPercent', s.MappingPercent); setVal('offerLetterLink', s.OfferLetterLink);
+  toggleMappingDocs();
+  setVal('mappingPercent', s.MappingPercent);
+  setVal('mappingDocLink', s.MappingDocLink);
+  setVal('offerLetterLink', s.OfferLetterLink);
+  setVal('nocLink', s.NOCLink);
   if(s.PlacementWillingness) pickRadio('willing', s.PlacementWillingness);
   toggleWithdrawal();
   if(s.WithdrawReason) document.getElementById('withdrawReason').value = s.WithdrawReason;
@@ -691,27 +753,56 @@ function submitIntern(){
   const status = document.getElementById('internshipStatus').value;
   let intern = null;
   if(status !== 'Not Opted'){
-    ['companyName','roleOffered'].forEach(id=>{
-      const el=document.getElementById(id);
-      if(!el.value.trim()){ el.classList.add('err'); ok=false; } else el.classList.remove('err');
-    });
-    const paid = document.querySelector('input[name=paidUnpaid]:checked').value;
-    if(paid==='Paid'){
-      const r=document.getElementById('remuneration');
-      if(!r.value || parseFloat(r.value)<=0){ r.classList.add('err'); ok=false; } else r.classList.remove('err');
+    const firm = isFirm();
+    const isLink = v => /^https?:\/\/\S+$/i.test(v);
+
+    if(firm){
+      ['companyName','roleOffered'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(!el.value.trim()){ el.classList.add('err'); ok=false; } else el.classList.remove('err');
+      });
+    } else {
+      ['companyName','roleOffered'].forEach(id=>document.getElementById(id).classList.remove('err'));
     }
+
+    const paid = document.querySelector('input[name=paidUnpaid]:checked').value;
+    const r=document.getElementById('remuneration');
+    if(firm && paid==='Paid' && (!r.value || parseFloat(r.value)<=0)){ r.classList.add('err'); ok=false; }
+    else r.classList.remove('err');
+
     const sd=val('startDate'), ed=val('endDate');
-    const datesOk = sd && ed && (new Date(ed) > new Date(sd));
+    // Firm internships need both dates; tentative ones only need order to make sense.
+    const datesOk = firm ? (sd && ed && new Date(ed) > new Date(sd))
+                         : (!sd || !ed || new Date(ed) > new Date(sd));
     document.getElementById('err-dates').style.display = datesOk?'none':'block';
     if(!datesOk) ok=false;
+
+    const mapStatus = document.getElementById('mappingStatus').value;
+    const mapDoc = val('mappingDocLink');
+    const mapDocNeeded = (mapStatus === 'Signed by faculty and HOD');
+    const mapDocBad = (mapDocNeeded && !isLink(mapDoc)) || (mapDoc !== '' && !isLink(mapDoc));
+    showErr('mappingDocLink', mapDocBad); if(mapDocBad) ok=false;
+
+    const offer = val('offerLetterLink');
+    const offerBad = (firm && !isLink(offer)) || (offer !== '' && !isLink(offer));
+    showErr('offerLetterLink', offerBad); if(offerBad) ok=false;
+
+    const noc = val('nocLink');
     intern = {
       CompanyName: val('companyName'), CompanyAddress: val('companyAddress'),
       RoleOffered: val('roleOffered'), PaidUnpaid: paid, Remuneration: val('remuneration'),
-      Mode: document.getElementById('mode').value, StartDate: sd, EndDate: ed,
+      Mode: document.getElementById('mode').value,
+      StartDate: sd, EndDate: ed, DatesConfirmed: firm ? 'Confirmed' : 'Tentative',
       HRContactName: val('hrName'), HRContactNumber: val('hrContact'),
       FacultyMentor: val('facultyMentor'),
-      MappingStatus: document.getElementById('mappingStatus').value,
-      MappingPercent: val('mappingPercent'), OfferLetterLink: val('offerLetterLink')
+      MappingStatus: mapStatus, MappingPercent: val('mappingPercent'),
+      MappingDocLink: mapDoc,
+      OfferLetterLink: offer, NOCLink: noc,
+      // TPO-facing: what still needs chasing up, computed at submit time.
+      DocsPending: [ isLink(offer)?null:'Offer letter',
+                     isLink(mapDoc)?null:'Mapping form',
+                     isLink(noc)?null:'NOC' ].filter(Boolean).join(', ') || 'None',
+      VerificationStatus: 'Pending TPO Verification'
     };
   }
   const willing = document.querySelector('input[name=willing]:checked').value;
