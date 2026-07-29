@@ -699,11 +699,8 @@ function toggleInternshipDetail(){
 }
 function toggleMappingDocs(){
   const st = document.getElementById('mappingStatus').value;
-  const needDoc = (st === 'Signed by faculty and HOD');
   document.getElementById('mappingDocBox').style.display = (st==='Not yet started') ? 'none' : 'block';
-  document.getElementById('lbl-mapdoc').textContent =
-    needDoc ? 'Signed Syllabus Mapping Form — Drive link *'
-            : 'Syllabus Mapping Form — Drive link (upload once signed)';
+  document.getElementById('lbl-mapdoc').textContent = 'Syllabus Mapping Form — Drive link (optional — upload once signed)';
 }
 function toggleStipend(){
   document.getElementById('stipendBox').style.display =
@@ -779,8 +776,8 @@ function submitIntern(){
 
     const mapStatus = document.getElementById('mappingStatus').value;
     const mapDoc = val('mappingDocLink');
-    const mapDocNeeded = (mapStatus === 'Signed by faculty and HOD');
-    const mapDocBad = (mapDocNeeded && !isLink(mapDoc)) || (mapDoc !== '' && !isLink(mapDoc));
+    // Mapping doc is optional — only validate the link format if something was entered.
+    const mapDocBad = (mapDoc !== '' && !isLink(mapDoc));
     showErr('mappingDocLink', mapDocBad); if(mapDocBad) ok=false;
 
     const offer = val('offerLetterLink');
